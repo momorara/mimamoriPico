@@ -63,7 +63,7 @@ def Cds_ini():
 
 def hidden_setting():
     WBGT_hidden  = 25 # 25未満のWBGTはambient上非表示とする
-    human_hidden = 3  # レベル3以下はambient上非表示とする
+    human_hidden = 5  # レベル3以下はambient上非表示とする
     return WBGT_hidden,human_hidden
 
 def main():
