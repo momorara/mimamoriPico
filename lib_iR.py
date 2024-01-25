@@ -5,7 +5,7 @@
 import machine
 import time
 
-SW   = machine.Pin(20, machine.Pin.IN)
+SW   = machine.Pin(14, machine.Pin.IN)
 led1 = machine.Pin(16, machine.Pin.OUT)
 led2 = machine.Pin(17, machine.Pin.OUT)
 
