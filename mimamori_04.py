@@ -47,7 +47,7 @@ measu_cycle = config.measu_cycle()
 wifi = config.wifi_set ()
 print( "wifi使用設定 :",wifi)
 
-hosei_temp,hosei_humdi = config.hosei ()
+hosei_temp,hosei_humdi = config.hosei()
 print( "温度補正値:",hosei_temp)
 print( "湿度補正値:",hosei_humdi)
 # 補正自体はlib_AHT10.pyで実施
