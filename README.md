@@ -30,6 +30,7 @@ git clone https://github.com/momorara/mimamoriPico<br>
 <h4><<動作環境>></h4>
 2023/8/1 ファームウェア(micropython-firmware-pico-w-130623.uf2)　で動作確認<br>
 2024/1/25 ファームウェア(RPI_PICO_W-20240105-v1.22.1.uf2)　で動作確認<br>
+2024/7/28 ファームウェア(RPI_PICO_W-20240602-v1.23.0.uf2)　で動作確認<br>
 
 <h4><<使用説明資料>></h4>
 説明書類の中の資料を確認ください。<br>
