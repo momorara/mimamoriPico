@@ -12,10 +12,11 @@
 2023/11/25  新基板への対応
 2023/11/26  湿度表示
 2023/11/27  非表示設定
+2024/08/23  mqtt対応
 
-mimamori_04
+mimamori_05
 """
-main_py = 1 # 1の時は自己リブートを有効にする。
+main_py = 0 # 1の時は自己リブートを有効にする。
 
 import time
 import gc
@@ -38,6 +39,9 @@ import lib_NTP
 import mailSend_01
 import ambient
 
+import mqtt_file
+import mqtt_pub
+
 # Ambient対応 
 ch_ID,write_KEY  = config.ambi()
 """                チャネルID   ライトキー        """
@@ -47,7 +51,7 @@ measu_cycle = config.measu_cycle()
 wifi = config.wifi_set ()
 print( "wifi使用設定 :",wifi)
 
-hosei_temp,hosei_humdi = config.hosei ()
+hosei_temp,hosei_humdi = config.hosei()
 print( "温度補正値:",hosei_temp)
 print( "湿度補正値:",hosei_humdi)
 # 補正自体はlib_AHT10.pyで実施
@@ -69,7 +73,16 @@ def ambient(temp,Cds,human,SW,wbgt,humi,stat=1):
     if WBGT_hidden  >  wbgt :wbgt  = 0
     if human_hidden >= human:human = human/10
     res = am.send({"d1": temp,"d2":Cds,"d3":human,"d4":SW,"d5": stat,"d6":wbgt,"d7":humi})
-    print(res)
+    print(res.status_code)
+    if res.status_code == 200:# ambient成功
+        print("ok")
+        # mqttのtopicを決定
+        topic = mqtt_file.topic_get()
+        print(topic)
+        # topicに温度を送信
+        mqtt_pub.mqtt_send(topic,temp)
+    else:
+        print("NG")
 
 def ambient_stat(stat):
     try:
