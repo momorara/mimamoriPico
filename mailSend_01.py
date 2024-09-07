@@ -121,7 +121,7 @@ def main():
 
     mail_subject = "testMail"   # 全角文字はメーラーにより文字化けする
     mail_body    = "test test"  # 全角文字もOK
-    toMailAddres = "nobu1121@me.com"
+    toMailAddres = "pc_mailbox@mineo.jp"
     mailSend(mail_subject,mail_body,toMailAddres)
 
     lib_LED.LEDonoff()
