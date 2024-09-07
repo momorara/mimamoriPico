@@ -27,7 +27,7 @@ def mail_setting():
     MailServerName = "smtp.mail.yahoo.co.jp"    # メールサーバー名
     UserName = "coxxxsum@yahoo.co.jp"           # プロバイダーのアカウント(ユーザー名)
     UserPass = "yahxxx731"                      # プロバイダーのパスワード
-    toMailAddres ="nobxx21@me.com"              # メールの宛先
+    toMailAddres ="pc_maxxxox@mineo.jp"         # メールの宛先
     mail_title = "SW_test_ON"
     mail_body  = "SW_test_test"
     return mail_onoff,MailServerName,UserName,UserPass,toMailAddres,mail_title,mail_body
