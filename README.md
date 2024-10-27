@@ -41,3 +41,4 @@ git clone https://github.com/momorara/mimamoriPico<br>
 資料は、説明文書・図面フォルダにあります。<br>
 2024/08/24   mqttとNode-REDダッシュボードの勧め　をアップ<br>
 2024/09/02 オプションとして、LINEへのメッセージ送信ライブラリを追加しました。LINEへの通知を考えておられる方は参考にして下さい。ただし、トークンの取得はネットで調べて下さい。<br>
+2024/10/27   「LINE Notify提供終了」がLINEで発表されています。https://notify-bot.line.me/closing-announce<br>
