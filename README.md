@@ -45,7 +45,7 @@ git clone https://github.com/momorara/mimamoriPico<br>
 2024/10/27   「LINE Notify提供終了」がLINEで発表されています。https://notify-bot.line.me/closing-announce<br>
 
 <h4><<サポート窓口>></h4>
-  メールアドレスが　tkj-works@mbr.nifty.com に変更になっています。e<br>
-  資料等を修正中ですが、ご注意ください。e<br>
+  メールアドレスが　tkj-works@mbr.nifty.com に変更になっています。<br>
+  資料等を修正中ですが、ご注意ください。<br>
 
 
