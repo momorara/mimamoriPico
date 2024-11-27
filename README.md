@@ -43,7 +43,8 @@ git clone https://github.com/momorara/mimamoriPico<br>
 2024/08/24   mqttとNode-REDダッシュボードの勧め　をアップ<br>
 2024/09/02 オプションとして、LINEへのメッセージ送信ライブラリを追加しました。LINEへの通知を考えておられる方は参考にして下さい。ただし、トークンの取得はネットで調べて下さい。<br>
 2024/10/27   「LINE Notify提供終了」がLINEで発表されています。https://notify-bot.line.me/closing-announce<br>
-
+2024/11/27  夜間にLEDを点灯させない設定を追加しました。
+  
 <h4><<サポート窓口>></h4>
   メールアドレスが　tkj-works@mbr.nifty.com に変更になっています。<br>
   資料等を修正中ですが、ご注意ください。<br>
