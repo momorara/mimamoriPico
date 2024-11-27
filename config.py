@@ -84,7 +84,7 @@ def nigth_mode():
     nigth_mode = 1
     if jst_time[3] < Daytime_off and jst_time[3] >= Daytime_on:
         nigth_mode = 0
-    #nigth_mode = 0 # 夜間LED消灯をする場合はこの行をコメントアウトする 
+    nigth_mode = 0 # 夜間LED消灯をする場合はこの行をコメントアウトする 
     return nigth_mode # この関数を使って戻り値が1ならLEDを点灯しない様にする
 
 # 夜間設定のテスト用関数
