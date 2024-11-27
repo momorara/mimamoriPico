@@ -92,11 +92,10 @@ def nigth_mode_test(i):
     # プログラムが面倒なので、昼間の点灯時間を設定します。
     Daytime_on = 5 # 朝のLED点灯開始時間
     Daytime_off = 22 # 夜間LED点灯時間の終わり Daytime_offはDaytime_onより大きい数字である事
-    # dt_now = datetime.datetime.now()
     nigth_mode = 1
     if i < Daytime_off and i >= Daytime_on:
         nigth_mode = 0
-    nigth_mode = 0 # 夜間LED消灯をする場合はこの行をコメントアウトする 
+    #nigth_mode = 0 
     return nigth_mode # この関数を使って戻り値が1ならLEDを点灯しない様にする
 
 def main():
