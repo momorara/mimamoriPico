@@ -14,10 +14,11 @@
 2023/11/27  非表示設定
 2024/08/23  mqtt対応
 2024/11/25  夜間LEDとOLEDを消灯対策 夜間の時間設定はconfig.pyで行う。
+            初回amboentで403となる対策
 
 mimamori_06
 """
-main_py = 1 # 1の時は自己リブートを有効にする。
+main_py = 0 # 1の時は自己リブートを有効にする。
 
 import time
 import gc
@@ -80,7 +81,7 @@ def ambient(temp,Cds,human,SW,wbgt,humi,stat=1):
     if WBGT_hidden  >  wbgt :wbgt  = 0
     if human_hidden >= human:human = human/10
     res = am.send({"d1": temp,"d2":Cds,"d3":human,"d4":SW,"d5": stat,"d6":wbgt,"d7":humi})
-    print(res.status_code)
+    # print(res.status_code)
     if res.status_code == 200:# ambient成功
         print("ok")
         # mqttのtopicを決定
@@ -89,7 +90,19 @@ def ambient(temp,Cds,human,SW,wbgt,humi,stat=1):
         # topicに温度を送信
         mqtt_pub.mqtt_send(topic,temp)
     else:
-        print("NG")
+        print("NG-1",res.status_code)
+        time.sleep(1)
+        res = am.send({"d1": temp,"d2":Cds,"d3":human,"d4":SW,"d5": stat,"d6":wbgt,"d7":humi})
+        print(res.status_code)
+        if res.status_code == 200:# ambient成功
+            print("ok")
+            # mqttのtopicを決定
+            topic = mqtt_file.topic_get()
+            print(topic)
+            # topicに温度を送信
+            mqtt_pub.mqtt_send(topic,temp)
+        else:
+            print("NG-2",res.status_code)
 
 def ambient_stat(stat):
     try:
