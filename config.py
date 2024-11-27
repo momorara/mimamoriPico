@@ -96,7 +96,7 @@ def nigth_mode_test(i):
     nigth_mode = 1
     if i < Daytime_off and i >= Daytime_on:
         nigth_mode = 0
-    # nigth_mode = 0 # 夜間LED消灯をする場合はこの行をコメントアウトする 
+    nigth_mode = 0 # 夜間LED消灯をする場合はこの行をコメントアウトする 
     return nigth_mode # この関数を使って戻り値が1ならLEDを点灯しない様にする
 
 def main():
