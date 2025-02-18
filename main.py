@@ -83,13 +83,14 @@ def ambient(temp,Cds,human,SW,wbgt,humi,stat=1):
     print(res.status_code)
     if res.status_code == 200:# ambient成功
         print("ok")
-        # mqttのtopicを決定
-        topic = mqtt_file.topic_get()
-        print(topic)
-        # topicに温度を送信
-        mqtt_pub.mqtt_send(topic,temp)
     else:
         print("NG")
+
+    # mqttのtopicを決定
+    topic = mqtt_file.topic_get()
+    print(topic)
+    # topicに温度を送信
+    mqtt_pub.mqtt_send(topic,temp)
 
 def ambient_stat(stat):
     try:
