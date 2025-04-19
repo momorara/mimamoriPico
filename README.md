@@ -33,6 +33,7 @@ git clone https://github.com/momorara/mimamoriPico<br>
 2024/07/28 ファームウェア(RPI_PICO_W-20240602-v1.23.0.uf2)　で動作確認<br>
 2024/10/28 ファームウェア(RPI_PICO_W-20241025-v1.24.0.uf2)　で動作確認<br>
 2025/02/24 ファームウェア(RPI_PICO_W-20241129-v1.24.1.uf2)　で動作確認<br>
+2025/04/19 ファームウェア(RPI_PICO_W-20250415-v1.25.0.uf2)　で動作確認<br>
 
 <h4><<ファームウェア置き場>></h4>
 https://micropython.org/download/RPI_PICO_W/<br>
@@ -49,6 +50,7 @@ https://micropython.org/download/RPI_PICO_W/<br>
 2024/10/27   「LINE Notify提供終了」がLINEで発表されています。https://notify-bot.line.me/closing-announce<br>
 2024/11/27  夜間にLEDを点灯させない設定を追加しました。プログラムの入れ替えの場合は、一旦picoW上のプログラムを削除してから再度アップロードする必要があるかもしれません。<br>
 2025/02/02　mqtt_pub.pyを更新しました。<br>
+2025/04/19　最新ファームウェアにて動作確認<br>
   
 <h4><<サポート窓口>></h4>
   メールアドレスが　tkj-works@mbr.nifty.com に変更になっています。<br>
