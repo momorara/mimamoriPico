@@ -58,4 +58,11 @@ https://micropython.org/download/RPI_PICO_W/<br>
   資料等を修正中ですが、ご注意ください。<br>
   サポートコミュニティー　https://www.facebook.com/groups/3773038759434230<br>
 
+<br>
+-------------------------------------------<br>
+基板の販売について、以下のショップにて扱っています。<br>
+BASEショップ<br>
+https://raspi.thebase.in/<br>
+スイッチサイエンス<br>
+https://www.switch-science.com/search?q=tkj<br>
 
