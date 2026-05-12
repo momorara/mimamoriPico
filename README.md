@@ -52,7 +52,6 @@ https://micropython.org/download/RPI_PICO_W/<br>
 2024/10/27   「LINE Notify提供終了」がLINEで発表されています。https://notify-bot.line.me/closing-announce<br>
 2024/11/27  夜間にLEDを点灯させない設定を追加しました。プログラムの入れ替えの場合は、一旦picoW上のプログラムを削除してから再度アップロードする必要があるかもしれません。<br>
 2025/02/02　mqtt_pub.pyを更新しました。<br>
-2025/04/19　最新ファームウェアにて動作確認<br>
 2026/05/12　組み立て説明書の一部修正<br>
   
 <h4><<サポート窓口>></h4>
