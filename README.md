@@ -55,6 +55,7 @@ https://micropython.org/download/RPI_PICO_W/<br>
 2025/02/02　mqtt_pub.pyを更新しました。<br>
 2026/05/12　組み立て説明書の一部修正<br>
 2026/08/15   ambient障害復旧した模様です。<br>
+2026/08/24  NTPを日本国内のNTPサーバーに変更<br>
   
 <h4><<サポート窓口>></h4>
   メールアドレスが　tkj-works@mbr.nifty.com に変更になっています。<br>
