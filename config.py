@@ -25,24 +25,7 @@ def ID_PASS():
     # あなたのwifiの設定に変更してください。
     ssid        = 'your ssid'
     password    = 'your password'
-
-    #  ソーズ
-    ssid        = 'TKJ'
-    password    = '19601121'
-    # izumo
-    # ssid        = 'snow4'
-    # password    = '0728244490'
     return ssid,password
-
-# def mail_setting():
-#     mail_onoff = 1                              # SWのonでメールを送信するかどうかを設定
-#     MailServerName = "smtp.mail.yahoo.co.jp"    # メールサーバー名
-#     UserName = "coxxxsum@yahoo.co.jp"           # プロバイダーのアカウント(ユーザー名)
-#     UserPass = "yahxxx731"                      # プロバイダーのパスワード
-#     toMailAddres ="pc_xxxbox@mineo.jp"          # メールの宛先
-#     mail_title = "SW_test_ON"
-#     mail_body  = "SW_test_test"
-#     return mail_onoff,MailServerName,UserName,UserPass,toMailAddres,mail_title,mail_body
     
 # sensorPicoとmimamoriPicoのセンサーの有無を設定
 def BMP_SR602():
@@ -62,8 +45,6 @@ def hosei():
 def BLYNK_token():
     BLYNK_AUTH = "your token"
     # your tokenの場合は、送信しない
-    #------------ Izumo_CPU
-    BLYNK_AUTH = "Z0KPeNnP6d3mYgAIKNtuWcnZUuqHJB_L"
     return BLYNK_AUTH
 
 def MINIVIZ_token():
@@ -71,10 +52,6 @@ def MINIVIZ_token():
     ROJECT_ID    = "your ID"
     LABEL_KEY    = "your Key"
     # your tokenの場合は、送信しない
-    #------------
-    MINIVIZ_AUTH = "PhDK5bHsX43QvcxxfWNayMBQHNEbb4BcBvkR78RoneY"
-    ROJECT_ID = "78041bc6-48f8-4be0-b0eb-67bc29798338"
-    LABEL_KEY = "test"
     return MINIVIZ_AUTH,ROJECT_ID,LABEL_KEY
 
 def i2c_ini():
@@ -93,8 +70,6 @@ def Cds_ini():
     Cds_max = 60000
     Cds_min = 1500
     return 28,Cds_max,Cds_min
-
-
 
 def hidden_setting():
     WBGT_hidden  = 25 # 25未満のWBGTはambient上非表示とする
