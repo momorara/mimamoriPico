@@ -17,7 +17,7 @@ import config
 
 
 # センサー補正値
-T_hosei,H_hosei = config.hosei()
+T_hosei,H_hosei,press = config.hosei()
 
 i2c_no,SDA_pin = config.i2c_ini()
 
