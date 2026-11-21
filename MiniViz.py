@@ -1,26 +1,20 @@
 
-# ==================================================
-# MiniViz_PicoW.py
-# Raspberry Pi Pico W / MicroPython
-# MiniVizデータ送信専用モジュール
-# 2026/11/13 修正
-#
-# 機能
-# ・MiniVizへのデータ送信
-# ・HTTPエラー対応
-# ・通信エラー再試行
-# ・HTTP 429対応
-# ・他のプログラムから関数として利用可能
-#
-# Wi-Fi接続・NTP時刻同期は呼び出し元で実施
-# ==================================================
+"""
+2026/11/17  wdtを使うので、
+項目	修正
+SSL化前	settimeout(2) を設定
+SSL化後	settimeout() を一切使用しない
+HTTP 429	待機せずFalseを返す
+通信エラー	Falseを返す
+再試行	なし
+通信後	ソケットを閉じる
+"""
 
 import time
-import urequests
-import random
+import socket
+import ssl
+import json
 import config
-import wifi_connect
-
 
 # --------------------------------------------------
 # MiniViz設定
@@ -28,14 +22,15 @@ import wifi_connect
 
 TOKEN, PROJECT_ID, LABEL_KEY = config.MINIVIZ_token()
 
-URL = "https://api.miniviz.net/api/project/{}".format(PROJECT_ID)
+HOST = "api.miniviz.net"
 
-URL = "https://api.miniviz.net/api/project/{}?token={}".format(
+PATH = "/api/project/{}?token={}".format(
     PROJECT_ID, TOKEN
 )
 
-MAX_RETRY = 3
-RETRY_WAIT = 5
+SEND_TIMEOUT = 6000       # 全体の目標制限時間(ms)
+SOCKET_TIMEOUT = 2        # SSL化前のソケット待ち時間(秒)
+
 
 # --------------------------------------------------
 # MiniVizデータ送信
@@ -47,119 +42,125 @@ def send_data(temperature, humidity, pressure, brightness, motion):
         print("MiniVizトークン未設定")
         return False
 
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + TOKEN
-    }
-    headers = {
-    "Content-Type": "application/json"
-    }
+    start = time.ticks_ms()
+    sock = None
 
-    # UNIX時間（ミリ秒）
-    timestamp_ms = int(time.time() * 1000)
+    try:
+        # 送信データ作成
+        timestamp_ms = int(time.time() * 1000)
 
-    # 送信データ
-    payload = {
-        "timestamp": timestamp_ms,
-        "label_key": LABEL_KEY,
-        "payload": {
-            "temperature": temperature,
-            "humidity": humidity,
-            "pressure": pressure,
-            "brightness": brightness,
-            "motion": motion
+        payload = {
+            "timestamp": timestamp_ms,
+            "label_key": LABEL_KEY,
+            "payload": {
+                "temperature": temperature,
+                "humidity": humidity,
+                "pressure": pressure,
+                "brightness": brightness,
+                "motion": motion
+            }
         }
-    }
 
-    # 最大4回送信
-    for attempt in range(MAX_RETRY + 1):
+        body = json.dumps(payload)
 
-        response = None
+        # HTTPリクエスト作成
+        body_bytes = body.encode()
 
-        try:
-            print("MiniViz送信:", attempt + 1, "/", MAX_RETRY + 1)
+        request = (
+            "POST " + PATH + " HTTP/1.1\r\n"
+            "Host: " + HOST + "\r\n"
+            "Content-Type: application/json\r\n"
+            "Content-Length: " + str(len(body_bytes)) + "\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+        ).encode() + body_bytes
 
-            response = urequests.post(
-                URL,
-                json=payload,
-                headers=headers
-            )
+        print("MiniViz送信開始")
 
-            status = response.status_code
-            print("HTTP Status:", status)
+        # DNS名前解決
+        addr = socket.getaddrinfo(HOST, 443)[0][-1]
 
-            # 送信成功
-            if 200 <= status < 300:
-                print("MiniViz送信成功")
-                print("Response:", response.text)
-                return True
+        # ソケット作成
+        sock = socket.socket()
 
-            # HTTP 429：アクセス制限
-            if status == 429:
+        # ★SSL化する前にタイムアウトを設定
+        sock.settimeout(SOCKET_TIMEOUT)
 
-                retry_after = response.headers.get("Retry-After")
+        # HTTPS接続
+        sock.connect(addr)
 
-                try:
-                    wait = int(retry_after)
-                except:
-                    wait = 65
+        # SSL化
+        sock = ssl.wrap_socket(
+            sock,
+            server_hostname=HOST
+        )
 
-                wait = max(1, wait)
+        # ★SSL化した後はsettimeout()を使用しない
 
-                print("HTTP 429: 待機", wait, "秒")
+        # 送信時間確認
+        if time.ticks_diff(time.ticks_ms(), start) >= SEND_TIMEOUT:
+            raise OSError("送信タイムアウト")
 
-                response.close()
-                response = None
+        # HTTPリクエスト送信
+        sock.write(request)
 
-                if attempt >= MAX_RETRY:
-                    print("再試行上限")
-                    return False
+        # HTTPヘッダー受信
+        response = b""
 
-                time.sleep(wait)
-                continue
+        while b"\r\n\r\n" not in response:
 
-            # その他のHTTPエラー
-            print("HTTPエラー:", status)
+            elapsed = time.ticks_diff(time.ticks_ms(), start)
 
+            if elapsed >= SEND_TIMEOUT:
+                raise OSError("送信タイムアウト")
+
+            # SSLソケットではsettimeout()を呼ばない
+            data = sock.read(256)
+
+            if not data:
+                break
+
+            response += data
+
+            if len(response) > 4096:
+                raise OSError("HTTPヘッダーサイズ超過")
+
+        # HTTPステータス確認
+        if b"\r\n" not in response:
+            raise OSError("HTTP応答なし")
+
+        status_line = response.split(b"\r\n", 1)[0]
+
+        print("HTTP Status:", status_line)
+
+        # 成功
+        if b" 200 " in status_line or b" 201 " in status_line:
+            print("MiniViz送信成功")
+            return True
+
+        # HTTP 429
+        if b" 429 " in status_line:
+            print("HTTP 429: アクセス制限")
+            return False
+
+        print("MiniViz送信失敗")
+        return False
+
+    except Exception as e:
+        print("MiniViz通信エラー:", repr(e))
+        return False
+
+    finally:
+
+        if sock is not None:
             try:
-                print("Response:", response.text)
+                sock.close()
             except:
                 pass
 
-            # 400番台は再送しない
-            if 400 <= status < 500:
-                print("リクエスト内容を確認してください")
-                return False
+        elapsed = time.ticks_diff(time.ticks_ms(), start)
 
-            # 500番台は再試行
-            if attempt < MAX_RETRY:
-                print("再試行まで待機:", RETRY_WAIT, "秒")
-                response.close()
-                response = None
-                time.sleep(RETRY_WAIT)
-                continue
-
-            return False
-
-        except Exception as e:
-
-            print("通信エラー:", repr(e))
-
-            if attempt >= MAX_RETRY:
-                print("送信失敗")
-                return False
-
-            print("再試行まで待機:", RETRY_WAIT, "秒")
-            time.sleep(RETRY_WAIT)
-
-        finally:
-            if response is not None:
-                try:
-                    response.close()
-                except:
-                    pass
-
-    return False
+        print("MiniViz処理時間:", elapsed, "ms")
 
 
 # --------------------------------------------------
@@ -167,6 +168,8 @@ def send_data(temperature, humidity, pressure, brightness, motion):
 # --------------------------------------------------
 
 def main():
+    import random
+    import wifi_connect
 
     print("")
     print("================================")
@@ -196,6 +199,9 @@ def main():
 
         except Exception as e:
             print("処理エラー:", e)
+            
+        print("--------------------")
+        time.sleep(60)
 # --------------------------------------------------
 # プログラム開始
 # --------------------------------------------------
